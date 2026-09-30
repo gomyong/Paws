@@ -6,6 +6,7 @@ APP="$1"
 BUNDLE_ID=com.gomyong.paws
 mkdir -p screenshots
 FAILED=0
+SUMMARY=()
 
 pick_device() {
   xcrun simctl list devices available -j | python3 -c "
@@ -34,6 +35,7 @@ run_on() {
     sleep 8
     if ! xcrun simctl spawn "$udid" launchctl list | grep -q "$BUNDLE_ID"; then
       echo "::error::$family / $scenario: 앱이 종료됨 (크래시 의심)"
+      SUMMARY+=("❌ $family / $scenario 크래시")
       FAILED=1
       ls -t ~/Library/Logs/DiagnosticReports/ 2>/dev/null | grep -i paws | head -1 | while read f; do
         echo "----- crash report: $f -----"; head -120 ~/Library/Logs/DiagnosticReports/"$f"
@@ -42,11 +44,11 @@ run_on() {
     fi
     local shot="screenshots/${family// /_}-$scenario.png"
     xcrun simctl io "$udid" screenshot "$shot" >/dev/null 2>&1
-    sips -Z 640 "$shot" --out "$shot.small.png" >/dev/null
+    sips -s format jpeg -s formatOptions 45 -Z 520 "$shot" --out "$shot.small.jpg" >/dev/null
     echo "SCREENSHOT-BEGIN $shot"
-    base64 -i "$shot.small.png" | tr -d '\n'; echo
+    base64 -i "$shot.small.jpg" | tr -d '\n'; echo
     echo "SCREENSHOT-END $shot"
-    echo "✅ $family / $scenario 실행 중"
+    SUMMARY+=("✅ $family / $scenario 실행 중 (스크린샷 $(stat -f%z "$shot.small.jpg") bytes)")
   done
   xcrun simctl spawn "$udid" log show --last 3m --predicate "process == \"Paws\" AND messageType == fault" --style compact 2>/dev/null | tail -30
   xcrun simctl shutdown "$udid" || true
@@ -54,4 +56,10 @@ run_on() {
 
 run_on "iPhone" home trip stop map reading
 run_on "iPad" trip stop
+
+# 로그 끝에서 바로 읽을 수 있도록 요약을 마지막에 찍는다
+echo "===== 빌드 경고 (Paws 소스) ====="
+grep -E "warning:" build.log 2>/dev/null | grep "/Paws/" | sed -E 's#.*/Paws/Paws/#Paws/#' | sort -u | head -60
+echo "===== 실행 요약 ====="
+printf '%s\n' "${SUMMARY[@]}"
 exit $FAILED
