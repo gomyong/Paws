@@ -1,6 +1,5 @@
 import SwiftUI
 import SwiftData
-import PhotosUI
 
 /// 여행 만들기·편집. 기간에 맞춰 Day가 자동으로 생긴다.
 struct TripFormView: View {
@@ -14,9 +13,8 @@ struct TripFormView: View {
     @State private var emoji = "✈️"
     @State private var start = Date.now
     @State private var end = Date.now
+    /// 커버 사진은 화면에 쓰지 않는다. 예전에 넣은 값은 그대로 둔다.
     @State private var coverData: Data?
-    @State private var coverItem: PhotosPickerItem?
-    @State private var loadingCover = false
 
     var body: some View {
         NavigationStack {
@@ -46,26 +44,6 @@ struct TripFormView: View {
                         .font(.pawsCaption)
                         .foregroundStyle(.secondary)
                 }
-
-                Section("커버 사진") {
-                    if let coverData {
-                        DataImageView(data: coverData, key: "cover-edit-\(coverData.count)")
-                            .frame(height: 160)
-                            .clipShape(RoundedRectangle(cornerRadius: Theme.cardCorner))
-                            .listRowInsets(EdgeInsets())
-                    }
-                    PhotosPicker(selection: $coverItem, matching: .images) {
-                        Label(coverData == nil ? "사진 고르기" : "다른 사진으로", systemImage: "photo")
-                    }
-                    if loadingCover {
-                        ProgressView()
-                    }
-                    if coverData != nil {
-                        Button("커버 사진 빼기", role: .destructive) {
-                            coverData = nil
-                        }
-                    }
-                }
             }
             .navigationTitle(trip == nil ? "새 여행" : "여행 편집")
             .navigationBarTitleDisplayMode(.inline)
@@ -75,17 +53,7 @@ struct TripFormView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("저장") { save() }
-                        .disabled(loadingCover)
                         .accessibilityIdentifier("trip.save")
-                }
-            }
-            .onChange(of: coverItem) { _, item in
-                guard let item else { return }
-                loadingCover = true
-                Task {
-                    let photos = await PhotoFactory.load([item])
-                    coverData = photos.first?.imageData
-                    loadingCover = false
                 }
             }
             .onAppear(perform: load)

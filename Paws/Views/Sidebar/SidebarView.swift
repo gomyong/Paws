@@ -67,6 +67,8 @@ struct SidebarView: View {
             }
         }
         .listStyle(.sidebar)
+        // 차콜 사이드바에는 포인트 컬러를 쓰지 않고 흰색으로 통일한다
+        .foregroundStyle(.white)
         .scrollContentBackground(.hidden)
         .background(Theme.sidebar)
         .navigationTitle("Paws")
@@ -107,6 +109,7 @@ struct SidebarView: View {
                 .accessibilityIdentifier("sidebar.newTrip")
             }
         }
+        .tint(.white)
         .environment(\.colorScheme, .dark)
         .sheet(item: $editingTrip) { trip in
             TripFormView(trip: trip) { _ in }
@@ -131,8 +134,8 @@ struct SidebarView: View {
                     .font(.caption2.weight(.semibold))
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
-                    .background(Theme.teal.opacity(0.25), in: Capsule())
-                    .foregroundStyle(Theme.teal)
+                    .background(Color.white.opacity(0.18), in: Capsule())
+                    .foregroundStyle(.white)
             }
         }
         .tag(SidebarItem.trip(trip))
@@ -167,7 +170,7 @@ struct SidebarView: View {
             } label: {
                 Label(trip.isPinned ? "고정 해제" : "고정", systemImage: "pin")
             }
-            .tint(Theme.teal)
+            .tint(.gray)
         }
     }
 

@@ -237,18 +237,12 @@ struct TripTimelineView: View {
     }
 }
 
-/// 여행 헤더: 커버 사진 + 이모지 + 큰 제목
+/// 여행 헤더: 이모지 + 큰 제목 + 기간
 struct TripHeader: View {
     let trip: Trip
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if trip.coverImageData != nil {
-                DataImageView(data: trip.coverImageData, key: "cover-\(trip.persistentModelID.hashValue)-\(trip.coverImageData?.count ?? 0)")
-                    .frame(height: 170)
-                    .frame(maxWidth: .infinity)
-                    .clipped()
-            }
             VStack(alignment: .leading, spacing: 4) {
                 Text(trip.emoji)
                     .font(.system(size: 40))
