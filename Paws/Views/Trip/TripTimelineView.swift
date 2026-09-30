@@ -85,7 +85,8 @@ struct TripTimelineView: View {
                 .accessibilityIdentifier("timeline.addStop")
                 .keyboardShortcut("n", modifiers: .command)
             }
-            ToolbarItem(placement: .secondaryAction) {
+            // secondaryAction은 iPad에서 시스템 넘침 버튼(…)이 되어 분할 뷰의 흰색을 따르므로 직접 둔다
+            ToolbarItem(placement: .primaryAction) {
                 tripMenu
             }
         }
