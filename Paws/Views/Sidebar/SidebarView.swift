@@ -23,15 +23,18 @@ struct SidebarView: View {
                 }
             }
 
-            Section("여행") {
-                ForEach(trips.filter { !$0.isPinned }) { trip in
-                    tripRow(trip)
-                }
-                if trips.isEmpty {
-                    Button {
-                        navigation.showingNewTrip = true
-                    } label: {
-                        Label("첫 여행 만들기", systemImage: "plus.circle")
+            let unpinned = trips.filter { !$0.isPinned }
+            if !unpinned.isEmpty || trips.isEmpty {
+                Section("여행") {
+                    ForEach(unpinned) { trip in
+                        tripRow(trip)
+                    }
+                    if trips.isEmpty {
+                        Button {
+                            navigation.showingNewTrip = true
+                        } label: {
+                            Label("첫 여행 만들기", systemImage: "plus.circle")
+                        }
                     }
                 }
             }

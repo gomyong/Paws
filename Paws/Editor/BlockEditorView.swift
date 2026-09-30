@@ -59,7 +59,7 @@ private struct BlockRow: View {
                     Image(systemName: block.checked ? "checkmark.circle.fill" : "circle")
                         .font(.system(size: 20))
                         .foregroundStyle(block.checked ? Theme.teal : Color.secondary)
-                        .frame(width: 28, height: 32)
+                        .frame(width: 28, height: 42)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(block.checked ? "완료됨" : "완료 안 됨")
@@ -70,7 +70,7 @@ private struct BlockRow: View {
                 Circle()
                     .fill(Color.primary)
                     .frame(width: 6, height: 6)
-                    .frame(width: 18, height: 32)
+                    .frame(width: 18, height: 42)
                     .accessibilityHidden(true)
                 BlockTextView(block: block, model: model)
             }

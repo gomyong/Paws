@@ -318,7 +318,8 @@ enum Exporter {
 }
 
 /// 마크다운 + 이미지 폴더 내보내기용 문서
-struct TripExportDocument: FileDocument {
+/// FileWrapper는 만든 뒤 바꾸지 않으므로 넘겨도 안전하다.
+struct TripExportDocument: FileDocument, @unchecked Sendable {
     static var readableContentTypes: [UTType] { [.folder] }
 
     let wrapper: FileWrapper
