@@ -82,7 +82,11 @@ private struct ContentColumn: View {
             TrashView()
         case nil:
             ContentUnavailableView {
-                Label("여행을 고르세요", systemImage: "pawprint")
+                Label {
+                    Text("여행을 고르세요")
+                } icon: {
+                    Image("PawsMark").renderingMode(.template)
+                }
             } description: {
                 Text("왼쪽에서 여행을 고르거나 새 여행을 만드세요.")
             } actions: {
@@ -112,7 +116,11 @@ private struct DetailColumn: View {
             ReadingView(scope: scope)
         case nil:
             ContentUnavailableView {
-                Label("Paws", systemImage: "pawprint.fill")
+                Label {
+                    Text("Paws")
+                } icon: {
+                    Image("PawsMark").renderingMode(.template)
+                }
             } description: {
                 Text("Day를 고르면 그날의 지도가, 일정을 고르면 에디터가 열립니다.")
             }

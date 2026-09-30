@@ -1,0 +1,2 @@
+앱 아이콘과 로고의 발자국(🐾) 모양은 Google Noto Emoji "paw prints"를 바탕으로 색만 바꿔 만들었습니다.
+Noto Emoji © Google, Apache License 2.0 — https://github.com/googlefonts/noto-emoji

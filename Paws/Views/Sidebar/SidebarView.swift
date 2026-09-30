@@ -14,6 +14,12 @@ struct SidebarView: View {
         @Bindable var navigation = navigation
 
         List(selection: $navigation.sidebar) {
+            Section {
+                PawsWordmark()
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 4, trailing: 0))
+            }
+
             let pinned = trips.filter(\.isPinned)
             if !pinned.isEmpty {
                 Section("고정") {
@@ -71,10 +77,15 @@ struct SidebarView: View {
         .foregroundStyle(.white)
         .scrollContentBackground(.hidden)
         .background(Theme.sidebar)
+        // 뒤로 가기 버튼 이름으로는 "Paws"를 쓰고, 화면 제목은 위의 흰색 워드마크로 대신한다
         .navigationTitle("Paws")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(Theme.sidebar, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("")
+            }
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     navigation.sidebar = .search
@@ -203,5 +214,24 @@ struct TagNode: Identifiable, Hashable {
             lhs.split(separator: "/").map(String.init).lexicographicallyPrecedes(rhs.split(separator: "/").map(String.init))
         }
         .map(TagNode.init(path:))
+    }
+}
+
+/// 사이드바 맨 위 로고: 흰색 "Paws" + 발자국(🐾) 마크
+struct PawsWordmark: View {
+    var body: some View {
+        HStack(spacing: 10) {
+            Text("Paws")
+                .font(.paws(34, weight: .bold, relativeTo: .largeTitle))
+            Image("PawsMark")
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 30, height: 30)
+        }
+        .foregroundStyle(.white)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Paws")
+        .accessibilityAddTraits(.isHeader)
     }
 }
