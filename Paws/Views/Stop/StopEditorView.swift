@@ -119,7 +119,7 @@ struct StopEditorView: View {
                 }
             }
         }
-        .environment(\.openPhoto, { photo in
+        .environment(\.openPhoto, OpenPhotoAction { photo in
             viewerPhoto = photo
         })
         .fullScreenCover(item: $viewerPhoto) { photo in

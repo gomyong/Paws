@@ -27,7 +27,7 @@ struct PhotoStrip: View {
                 }
                 ForEach(stop.sortedPhotos) { photo in
                     PhotoThumbnail(photo: photo, size: 76)
-                        .onTapGesture { openPhoto?(photo) }
+                        .onTapGesture { openPhoto(photo) }
                         .overlay(alignment: .topLeading) {
                             if stop.coverPhotoID == photo.uuid {
                                 Image(systemName: "star.fill")

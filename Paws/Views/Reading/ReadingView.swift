@@ -87,7 +87,7 @@ struct ReadingView: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
-        .environment(\.openPhoto, { photo in
+        .environment(\.openPhoto, OpenPhotoAction { photo in
             viewerPhoto = photo
         })
         .fullScreenCover(item: $viewerPhoto) { photo in
@@ -227,7 +227,7 @@ private struct ReadingStopView: View {
                             .frame(minWidth: 0, maxWidth: .infinity)
                             .clipped()
                             .clipShape(RoundedRectangle(cornerRadius: 6))
-                            .onTapGesture { openPhoto?(photo) }
+                            .onTapGesture { openPhoto(photo) }
                     }
                 }
             }
@@ -249,7 +249,7 @@ private struct ReadingPhoto: View {
         PhotoImageView(photo: photo, full: true, contentMode: .fit)
             .aspectRatio(photo.aspectRatio, contentMode: .fit)
             .clipShape(RoundedRectangle(cornerRadius: Theme.cardCorner))
-            .onTapGesture { openPhoto?(photo) }
+            .onTapGesture { openPhoto(photo) }
     }
 }
 
