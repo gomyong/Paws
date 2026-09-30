@@ -11,7 +11,7 @@ final class PawsUITests: XCTestCase {
 
     override func tearDown() {
         // 실패하면 화면 요소 트리를 로그에 남긴다 (CI 로그만 보고 원인을 찾기 위해)
-        if let run = testRun, !run.hasSucceeded, let app {
+        if let run = testRun, run.totalFailureCount > 0, let app {
             print("===== UI 트리: \(name) =====")
             print(String(app.debugDescription.prefix(12_000)))
             let shot = XCTAttachment(screenshot: app.screenshot())

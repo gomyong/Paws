@@ -43,8 +43,9 @@ struct SidebarView: View {
                 Label("즐겨찾는 장소", systemImage: "star")
                     .tag(SidebarItem.favorites)
                 Label("검색", systemImage: "magnifyingglass")
-                    .tag(SidebarItem.search)
+                    .accessibilityElement(children: .combine)
                     .accessibilityIdentifier("sidebar.search")
+                    .tag(SidebarItem.search)
             }
 
             let tree = TagNode.tree(from: tags)
@@ -60,8 +61,9 @@ struct SidebarView: View {
 
             Section {
                 Label("휴지통", systemImage: "trash")
-                    .tag(SidebarItem.trash)
+                    .accessibilityElement(children: .combine)
                     .accessibilityIdentifier("sidebar.trash")
+                    .tag(SidebarItem.trash)
             }
         }
         .listStyle(.sidebar)
