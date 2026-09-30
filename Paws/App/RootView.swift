@@ -19,11 +19,16 @@ struct RootView: View {
         } content: {
             ContentColumn()
                 .navigationSplitViewColumnWidth(min: 300, ideal: 360, max: 440)
+                .tint(Theme.teal)
         } detail: {
             NavigationStack {
                 DetailColumn()
             }
+            .tint(Theme.teal)
         }
+        // 사이드바 접기 버튼 같은 시스템 버튼은 분할 뷰 전체의 색을 따른다.
+        // 차콜 사이드바에 teal을 쓰지 않도록 여기는 흰색, 나머지 열은 teal로 다시 칠한다.
+        .tint(.white)
         .environment(navigation)
         #if DEBUG
         .task {

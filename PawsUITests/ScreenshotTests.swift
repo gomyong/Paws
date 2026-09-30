@@ -39,7 +39,8 @@ final class ScreenshotTests: XCTestCase {
     }
 
     private func capture(_ app: XCUIApplication, name: String) {
-        let screenshot = app.screenshot()
+        // app.screenshot()은 가로 화면에서 세로 틀로 잘려 나오므로 화면 전체를 찍는다
+        let screenshot = XCUIScreen.main.screenshot()
         let attachment = XCTAttachment(screenshot: screenshot)
         attachment.name = name
         attachment.lifetime = .keepAlways
