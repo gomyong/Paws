@@ -1,0 +1,47 @@
+name: iOS build & simulator run
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-run:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Xcode 버전
+        run: |
+          sudo xcode-select -s "$(ls -d /Applications/Xcode_16*.app | sort -V | tail -1)"
+          xcodebuild -version
+
+      - name: 빌드 (시뮬레이터, 서명 없음)
+        run: |
+          set -o pipefail
+          xcodebuild -project Paws.xcodeproj -target Paws -configuration Debug \
+            -sdk iphonesimulator ARCHS=arm64 ONLY_ACTIVE_ARCH=YES \
+            SYMROOT="$PWD/build" CODE_SIGNING_ALLOWED=NO \
+            build 2>&1 | tee build.log | grep -E "error:|warning: .*(deprecated|never)|\*\* BUILD" || true
+          echo "===== 컴파일 오류 요약 ====="
+          grep -E "error:" build.log | sort -u | head -100 || true
+          test -d build/Debug-iphonesimulator/Paws.app
+
+      - name: 시뮬레이터 실행 + 스크린샷
+        run: scripts/ci-run.sh build/Debug-iphonesimulator/Paws.app
+
+      - name: 결과 업로드
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: paws-ci
+          path: |
+            build.log
+            screenshots/
+          if-no-files-found: ignore

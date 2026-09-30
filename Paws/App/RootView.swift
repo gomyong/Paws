@@ -25,6 +25,13 @@ struct RootView: View {
             }
         }
         .environment(navigation)
+        #if DEBUG
+        .task {
+            if DemoData.isEnabled {
+                DemoData.open(DemoData.seed(context: context), navigation: navigation)
+            }
+        }
+        #endif
         .onChange(of: scenePhase) { _, phase in
             if phase != .active {
                 try? context.save()
