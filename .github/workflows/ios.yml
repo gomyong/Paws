@@ -1,9 +1,7 @@
 name: iOS build & simulator run
 
+# 자동 실행하지 않는다. GitHub Actions 탭에서 "Run workflow"로 필요할 때만 돌린다.
 on:
-  push:
-    branches: ['**']
-  pull_request:
   workflow_dispatch:
 
 concurrency:

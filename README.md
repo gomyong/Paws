@@ -63,7 +63,7 @@ Xcode 16의 폴더 동기화 그룹을 쓰므로 `Paws/` 안에 파일을 추가
 
 ## CI: 빌드와 시뮬레이터 실행
 
-`.github/workflows/ios.yml`이 푸시마다 GitHub Actions macOS 러너에서 다음을 한다.
+`.github/workflows/ios.yml`은 자동으로 돌지 않는다. GitHub의 Actions 탭에서 **Run workflow**를 누르면 macOS 러너에서 다음을 한다.
 
 1. 시뮬레이터용으로 서명 없이 빌드하고 컴파일 오류·경고를 요약한다.
 2. `scripts/ci-test.sh`가 iPhone 시뮬레이터에서 UI 테스트(핵심 흐름 9개)를 돌린다.
