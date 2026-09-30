@@ -47,6 +47,11 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
 
     /// 1분 이내의 위치가 있으면 그대로 쓰고, 없으면 한 번 조회한다. 10초가 넘으면 nil.
     func currentLocation() async -> CLLocation? {
+        #if DEBUG
+        if let mock = LaunchOptions.mockPlace, let coordinate = mock.coordinate {
+            return CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        }
+        #endif
         if let recent = manager.location, abs(recent.timestamp.timeIntervalSinceNow) < 60 {
             return recent
         }
@@ -128,6 +133,9 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
 
     /// 현재 위치를 장소로. 역지오코딩이 안 되면(오프라인) 좌표만 담는다.
     func currentPlace() async -> PlaceSelection? {
+        #if DEBUG
+        if let mock = LaunchOptions.mockPlace { return mock }
+        #endif
         guard let location = await currentLocation() else { return nil }
         if let described = await describe(location) {
             return described

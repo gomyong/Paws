@@ -77,6 +77,7 @@ struct FormattingToolbar: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(label)
+        .accessibilityIdentifier("toolbar.\(icon)")
     }
 
     private func kindButton(_ kind: BlockKind, icon: String, label: String) -> some View {
@@ -87,6 +88,7 @@ struct FormattingToolbar: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(label)
+        .accessibilityIdentifier("toolbar.\(kind.rawValue)")
         .accessibilityAddTraits(focusedKind == kind ? .isSelected : [])
     }
 }

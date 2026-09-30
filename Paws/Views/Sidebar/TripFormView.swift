@@ -35,6 +35,7 @@ struct TripFormView: View {
                             .accessibilityLabel("이모지")
                         TextField("여행 제목", text: $title)
                             .font(.pawsSubtitle)
+                            .accessibilityIdentifier("trip.title")
                     }
                 }
 
@@ -75,6 +76,7 @@ struct TripFormView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("저장") { save() }
                         .disabled(loadingCover)
+                        .accessibilityIdentifier("trip.save")
                 }
             }
             .onChange(of: coverItem) { _, item in

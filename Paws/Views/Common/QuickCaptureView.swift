@@ -56,6 +56,7 @@ struct QuickCaptureView: View {
                     HStack {
                         TextField(locating ? "위치 확인 중…" : "장소 이름", text: $name)
                             .font(.pawsHeadline)
+                            .accessibilityIdentifier("quick.name")
                         if locating { ProgressView() }
                     }
                     if let place, !place.address.isEmpty {
@@ -68,6 +69,7 @@ struct QuickCaptureView: View {
                 Section("한 줄") {
                     TextField("지금 이 순간을 한 줄로", text: $note, axis: .vertical)
                         .focused($noteFocused)
+                        .accessibilityIdentifier("quick.note")
                         .font(.pawsBody)
                 }
 
@@ -85,6 +87,7 @@ struct QuickCaptureView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("저장") { save() }
+                        .accessibilityIdentifier("quick.save")
                         .disabled(processing || (photo == nil && note.isEmpty && name.isEmpty))
                 }
             }

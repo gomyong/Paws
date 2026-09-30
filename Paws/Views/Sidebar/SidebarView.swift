@@ -44,6 +44,7 @@ struct SidebarView: View {
                     .tag(SidebarItem.favorites)
                 Label("검색", systemImage: "magnifyingglass")
                     .tag(SidebarItem.search)
+                    .accessibilityIdentifier("sidebar.search")
             }
 
             let tree = TagNode.tree(from: tags)
@@ -60,6 +61,7 @@ struct SidebarView: View {
             Section {
                 Label("휴지통", systemImage: "trash")
                     .tag(SidebarItem.trash)
+                    .accessibilityIdentifier("sidebar.trash")
             }
         }
         .listStyle(.sidebar)
@@ -82,6 +84,7 @@ struct SidebarView: View {
                 } label: {
                     Label("빠른 기록", systemImage: "camera")
                 }
+                .accessibilityIdentifier("sidebar.quickCapture")
 
                 Menu {
                     Button {
@@ -95,10 +98,11 @@ struct SidebarView: View {
                         Label("저장 공간과 설정", systemImage: "gearshape")
                     }
                 } label: {
-                    Label("더 보기", systemImage: "plus")
+                    Label("새 여행", systemImage: "plus")
                 } primaryAction: {
                     navigation.showingNewTrip = true
                 }
+                .accessibilityIdentifier("sidebar.newTrip")
             }
         }
         .environment(\.colorScheme, .dark)
@@ -130,6 +134,7 @@ struct SidebarView: View {
             }
         }
         .tag(SidebarItem.trip(trip))
+        .accessibilityIdentifier("sidebar.trip")
         .contextMenu {
             Button {
                 trip.isPinned.toggle()

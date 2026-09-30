@@ -71,12 +71,14 @@ struct ReadingView: View {
                 } label: {
                     Label("발행", systemImage: "square.and.arrow.up")
                 }
+                .accessibilityIdentifier("reading.publish")
             }
         }
         .overlay(alignment: .bottom) {
             if let toast {
                 Text(toast)
                     .font(.pawsCaption.weight(.semibold))
+                    .accessibilityIdentifier("toast")
                     .padding(.horizontal, 16)
                     .padding(.vertical, 10)
                     .background(.regularMaterial, in: Capsule())

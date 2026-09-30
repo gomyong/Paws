@@ -61,6 +61,7 @@ struct StopCard: View {
         }
         .padding(.vertical, 4)
         .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("stopCard")
     }
 }
 

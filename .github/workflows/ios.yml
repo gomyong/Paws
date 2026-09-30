@@ -36,6 +36,10 @@ jobs:
       - name: 시뮬레이터 실행 + 스크린샷
         run: scripts/ci-run.sh build/Debug-iphonesimulator/Paws.app
 
+      - name: UI 테스트 (iPhone)
+        if: always()
+        run: scripts/ci-test.sh
+
       - name: 결과 업로드
         if: always()
         uses: actions/upload-artifact@v4
@@ -43,5 +47,6 @@ jobs:
           name: paws-ci
           path: |
             build.log
+            test.log
             screenshots/
           if-no-files-found: ignore

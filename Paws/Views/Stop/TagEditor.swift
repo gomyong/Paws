@@ -51,6 +51,7 @@ struct TagEditor: View {
                     .autocorrectionDisabled()
                     .submitLabel(.done)
                     .focused($focused)
+                    .accessibilityIdentifier("tag.input")
                     .frame(width: 130)
                     .padding(.vertical, 5)
                     .onSubmit { commit(input) }

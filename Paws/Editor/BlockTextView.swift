@@ -79,6 +79,7 @@ struct BlockTextView: UIViewRepresentable {
             textView.attributedText = RunCodec.attributed(block.runs, kind: block.kind, checked: block.checked)
             textView.typingAttributes = RunCodec.baseAttributes(for: block.kind, checked: block.checked)
             textView.accessibilityLabel = block.kind == .paragraph ? "본문" : block.kind.label
+            textView.accessibilityIdentifier = "block.\(block.kind.rawValue)"
             lastRuns = block.runs
             lastKind = block.kind
             lastChecked = block.checked

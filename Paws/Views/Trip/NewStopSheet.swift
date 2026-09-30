@@ -37,6 +37,7 @@ struct NewStopSheet: View {
                 if place != nil {
                     ToolbarItem(placement: .confirmationAction) {
                         Button("저장") { save() }
+                            .accessibilityIdentifier("stop.save")
                             .keyboardShortcut(.defaultAction)
                     }
                 }
@@ -51,6 +52,7 @@ struct NewStopSheet: View {
         Form {
             Section("장소") {
                 TextField("장소 이름", text: $name)
+                    .accessibilityIdentifier("stop.name")
                     .font(.pawsHeadline)
                 if let place, !place.address.isEmpty {
                     Text(place.address)

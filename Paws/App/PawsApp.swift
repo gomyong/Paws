@@ -7,6 +7,9 @@ struct PawsApp: App {
 
     init() {
         AppFont.register()
+        #if DEBUG
+        LaunchOptions.applyUIDefaults()
+        #endif
         container = PawsApp.makeContainer()
     }
 
@@ -27,6 +30,14 @@ struct PawsApp: App {
     /// iCloud를 쓸 수 없는 상태(로그아웃, 서명 미설정)여도 로컬 저장으로 동작한다.
     static func makeContainer() -> ModelContainer {
         #if DEBUG
+        if LaunchOptions.isUITest {
+            // UI 테스트: iCloud 없이 전용 저장소. 앱을 다시 켜도 남는지 확인할 수 있게 디스크에 둔다
+            LaunchOptions.prepareTestStore()
+            let test = ModelConfiguration("PawsUITest", schema: schema, url: LaunchOptions.testStoreURL, cloudKitDatabase: .none)
+            if let container = try? ModelContainer(for: schema, configurations: [test]) {
+                return container
+            }
+        }
         if DemoData.isEnabled {
             // 시뮬레이터 확인용: 매번 빈 메모리 저장소에서 시작한다
             let memory = ModelConfiguration("PawsDemo", schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)

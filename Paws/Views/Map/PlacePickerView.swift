@@ -34,6 +34,7 @@ struct PlacePickerList: View {
                     }
                 }
                 .disabled(currentPlace == nil)
+                .accessibilityIdentifier("place.current")
 
                 Button {
                     showingMap = true
@@ -48,6 +49,7 @@ struct PlacePickerList: View {
                     } label: {
                         Label("‘\(typed)’ 이름으로 기록", systemImage: "character.cursor.ibeam")
                     }
+                    .accessibilityIdentifier("place.useName")
                 }
             }
 

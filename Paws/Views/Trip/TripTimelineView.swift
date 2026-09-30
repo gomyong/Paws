@@ -42,10 +42,12 @@ struct TripTimelineView: View {
             ForEach(trip.sortedDays) { day in
                 Section {
                     DayRow(day: day)
+                        .accessibilityIdentifier("dayRow")
                         .tag(DetailItem.day(day))
                         .contextMenu { dayMenu(day) }
                     ForEach(Array(day.liveStops.enumerated()), id: \.element.persistentModelID) { index, stop in
                         StopCard(stop: stop, number: index + 1)
+                            .accessibilityIdentifier("stopCard")
                             .tag(DetailItem.stop(stop))
                             .contextMenu { stopMenu(stop) }
                             .swipeActions(edge: .trailing) {
@@ -80,6 +82,7 @@ struct TripTimelineView: View {
                 } label: {
                     Label("새 일정", systemImage: "plus")
                 }
+                .accessibilityIdentifier("timeline.addStop")
                 .keyboardShortcut("n", modifiers: .command)
             }
             ToolbarItem(placement: .secondaryAction) {
@@ -173,6 +176,7 @@ struct TripTimelineView: View {
         } label: {
             Label("여행 메뉴", systemImage: "ellipsis.circle")
         }
+        .accessibilityIdentifier("timeline.menu")
     }
 
     @ViewBuilder

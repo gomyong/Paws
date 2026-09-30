@@ -50,8 +50,11 @@ struct StopEditorView: View {
         .toolbar { toolbarContent }
         .onAppear {
             let target = stop
+            let modelContext = context
             editor.onCommit = { blocks in
                 target.blocks = blocks
+                // 앱이 강제 종료돼도 작성 중인 글이 남도록 자동 저장 때마다 디스크에 쓴다
+                try? modelContext.save()
             }
         }
         .onDisappear {
@@ -223,6 +226,7 @@ struct StopEditorView: View {
         VStack(alignment: .leading, spacing: 6) {
             TextField("장소 이름", text: $stop.placeName, axis: .vertical)
                 .font(.pawsTitle)
+                .accessibilityIdentifier("editor.placeName")
             HStack(spacing: 8) {
                 DatePicker("시각", selection: timeBinding, displayedComponents: [.date, .hourAndMinute])
                     .labelsHidden()
@@ -297,6 +301,7 @@ struct StopEditorView: View {
             } label: {
                 Label("일정 메뉴", systemImage: "ellipsis.circle")
             }
+            .accessibilityIdentifier("editor.menu")
         }
     }
 
