@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- 나머지 키는 빌드 설정(INFOPLIST_KEY_*)에서 생성된다 -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<!-- CloudKit 변경 알림을 받아 다른 기기의 기록을 가져온다 -->
+		<string>remote-notification</string>
+	</array>
+</dict>
+</plist>
