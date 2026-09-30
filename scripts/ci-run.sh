@@ -33,7 +33,10 @@ run_on() {
     xcrun simctl terminate "$udid" "$BUNDLE_ID" 2>/dev/null || true
     xcrun simctl launch "$udid" "$BUNDLE_ID" --demo "--demo-open=$scenario" >/dev/null
     sleep 8
-    if ! xcrun simctl spawn "$udid" launchctl list | grep -q "$BUNDLE_ID"; then
+    # grep -q는 일찍 끝나 앞 프로세스가 SIGPIPE를 받으므로(pipefail에서 오탐), 출력을 먼저 받아 둔다
+    local services
+    services=$(xcrun simctl spawn "$udid" launchctl list 2>/dev/null)
+    if ! grep -q "$BUNDLE_ID" <<< "$services"; then
       echo "::error::$family / $scenario: 앱이 종료됨 (크래시 의심)"
       SUMMARY+=("❌ $family / $scenario 크래시")
       FAILED=1
