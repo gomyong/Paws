@@ -14,6 +14,7 @@ struct ReadingView: View {
     @State private var showingShare = false
     @State private var exportDocument: TripExportDocument?
     @State private var showingExporter = false
+    @State private var viewerPhoto: Photo?
 
     var body: some View {
         ScrollView {
@@ -85,6 +86,12 @@ struct ReadingView: View {
                     .padding(.bottom, 24)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
+        }
+        .environment(\.openPhoto, { photo in
+            viewerPhoto = photo
+        })
+        .fullScreenCover(item: $viewerPhoto) { photo in
+            PhotoViewer(photos: photo.stop?.sortedPhotos ?? [photo], start: photo)
         }
         .sheet(isPresented: $showingShare) {
             ShareSheet(items: shareURLs)
@@ -170,6 +177,7 @@ private struct ReadingDaySection: View {
 
 /// 일정 하나를 읽기 전용으로
 private struct ReadingStopView: View {
+    @Environment(\.openPhoto) private var openPhoto
     let stop: Stop
     let number: Int
     var onOpen: (Stop) -> Void
@@ -219,6 +227,7 @@ private struct ReadingStopView: View {
                             .frame(minWidth: 0, maxWidth: .infinity)
                             .clipped()
                             .clipShape(RoundedRectangle(cornerRadius: 6))
+                            .onTapGesture { openPhoto?(photo) }
                     }
                 }
             }
@@ -233,12 +242,14 @@ private struct ReadingStopView: View {
 }
 
 private struct ReadingPhoto: View {
+    @Environment(\.openPhoto) private var openPhoto
     let photo: Photo
 
     var body: some View {
         PhotoImageView(photo: photo, full: true, contentMode: .fit)
             .aspectRatio(photo.aspectRatio, contentMode: .fit)
             .clipShape(RoundedRectangle(cornerRadius: Theme.cardCorner))
+            .onTapGesture { openPhoto?(photo) }
     }
 }
 

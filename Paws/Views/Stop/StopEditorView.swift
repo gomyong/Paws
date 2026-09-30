@@ -24,6 +24,7 @@ struct StopEditorView: View {
     @State private var showingLink = false
     @State private var linkText = ""
     @State private var dropTargeted = false
+    @State private var viewerPhoto: Photo?
 
     init(stop: Stop) {
         self.stop = stop
@@ -117,6 +118,12 @@ struct StopEditorView: View {
                     }
                 }
             }
+        }
+        .environment(\.openPhoto, { photo in
+            viewerPhoto = photo
+        })
+        .fullScreenCover(item: $viewerPhoto) { photo in
+            PhotoViewer(photos: stop.sortedPhotos, start: photo)
         }
         .alert("링크", isPresented: $showingLink) {
             TextField("https://", text: $linkText)

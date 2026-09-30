@@ -11,6 +11,9 @@ struct PawsApp: App {
         LaunchOptions.applyUIDefaults()
         #endif
         container = PawsApp.makeContainer()
+        QuickRecordIntent.handler = {
+            QuickCapture.shared.isPresented = true
+        }
     }
 
     var body: some Scene {

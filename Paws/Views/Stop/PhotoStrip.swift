@@ -3,6 +3,7 @@ import PhotosUI
 
 /// 일정에 붙은 사진 줄. 보관함에서 여러 장, 또는 카메라로 바로.
 struct PhotoStrip: View {
+    @Environment(\.openPhoto) private var openPhoto
     let stop: Stop
     @Binding var items: [PhotosPickerItem]
     var onCamera: () -> Void
@@ -26,6 +27,7 @@ struct PhotoStrip: View {
                 }
                 ForEach(stop.sortedPhotos) { photo in
                     PhotoThumbnail(photo: photo, size: 76)
+                        .onTapGesture { openPhoto?(photo) }
                         .overlay(alignment: .topLeading) {
                             if stop.coverPhotoID == photo.uuid {
                                 Image(systemName: "star.fill")

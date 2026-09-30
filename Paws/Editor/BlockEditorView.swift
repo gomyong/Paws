@@ -30,6 +30,7 @@ struct BlockEditorView: View {
 }
 
 private struct BlockRow: View {
+    @Environment(\.openPhoto) private var openPhoto
     let block: Block
     let model: BlockEditorModel
     let stop: Stop
@@ -80,6 +81,7 @@ private struct BlockRow: View {
                     PhotoImageView(photo: photo, full: true)
                         .aspectRatio(photo.aspectRatio, contentMode: .fit)
                         .clipShape(RoundedRectangle(cornerRadius: Theme.cardCorner))
+                        .onTapGesture { openPhoto?(photo) }
                 } else {
                     Label("사진을 찾을 수 없어요", systemImage: "photo.badge.exclamationmark")
                         .font(.pawsCaption)

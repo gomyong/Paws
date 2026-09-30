@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UniformTypeIdentifiers
 
 /// 저장 공간과 동기화 상태. 사진 용량이 iCloud 무료 공간을 넘기지 않는지 미리 본다.
 struct SettingsView: View {
@@ -7,6 +8,9 @@ struct SettingsView: View {
     @Query private var photos: [Photo]
     @Query private var trips: [Trip]
     @Query private var stops: [Stop]
+    @State private var backup: TripExportDocument?
+    @State private var showingBackup = false
+    @State private var backupResult: String?
 
     private var photoBytes: Int {
         photos.reduce(0) { $0 + $1.byteCount }
@@ -40,8 +44,27 @@ struct SettingsView: View {
                         .foregroundStyle(.secondary)
                 }
 
+                Section {
+                    Button {
+                        backup = TripExportDocument(wrapper: Exporter.backup(trips.filter { $0.deletedAt == nil }))
+                        showingBackup = true
+                    } label: {
+                        Label("모든 여행 내보내기 (마크다운 + 사진)", systemImage: "externaldrive")
+                    }
+                    .disabled(trips.allSatisfy { $0.deletedAt != nil })
+                    if let backupResult {
+                        Text(backupResult)
+                            .font(.pawsCaption)
+                            .foregroundStyle(.secondary)
+                    }
+                } header: {
+                    Text("백업")
+                } footer: {
+                    Text("여행마다 폴더를 만들어 글은 마크다운, 사진은 원본 사본으로 저장합니다. 파일 앱의 iCloud Drive나 외장 저장소에 두세요.")
+                }
+
                 Section("빠른 기록") {
-                    Text("단축어 앱이나 액션 버튼에 ‘Paws 빠른 기록’을 연결하면 앱 첫 화면을 거치지 않고 바로 카메라가 열리고, 현재 위치로 일정이 만들어집니다.")
+                    Text("제어 센터·잠금화면 버튼, 홈 화면 위젯, 액션 버튼, 단축어에 ‘Paws 빠른 기록’을 두면 바로 카메라가 열리고 현재 위치로 일정이 만들어집니다.")
                         .font(.pawsCaption)
                         .foregroundStyle(.secondary)
                 }
@@ -49,6 +72,18 @@ struct SettingsView: View {
                 Section {
                     LabeledContent("버전", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "-")
                 }
+            }
+            .fileExporter(
+                isPresented: $showingBackup,
+                document: backup,
+                contentType: .folder,
+                defaultFilename: "Paws 백업 \(Fmt.iso(DayMath.normalize(.now)))"
+            ) { result in
+                switch result {
+                case .success: backupResult = "내보냈어요."
+                case .failure(let error): backupResult = "내보내지 못했어요: \(error.localizedDescription)"
+                }
+                backup = nil
             }
             .navigationTitle("저장 공간과 설정")
             .navigationBarTitleDisplayMode(.inline)

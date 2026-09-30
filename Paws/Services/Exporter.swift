@@ -181,6 +181,23 @@ enum Exporter {
         ])
     }
 
+    /// 모든 여행 백업: 여행마다 "날짜 제목" 폴더
+    static func backup(_ trips: [Trip]) -> FileWrapper {
+        var folders: [String: FileWrapper] = [:]
+        for trip in trips {
+            var name = "\(Fmt.iso(trip.startDate)) \(safeFileName(trip.displayTitle))"
+            var suffix = 2
+            while folders[name] != nil {
+                name = "\(Fmt.iso(trip.startDate)) \(safeFileName(trip.displayTitle)) \(suffix)"
+                suffix += 1
+            }
+            let folder = self.folder(for: trip)
+            folder.preferredFilename = name
+            folders[name] = folder
+        }
+        return FileWrapper(directoryWithFileWrappers: folders)
+    }
+
     static func safeFileName(_ name: String) -> String {
         let invalid = CharacterSet(charactersIn: "/\\?%*|\"<>:")
         let cleaned = name.components(separatedBy: invalid).joined(separator: "-")
