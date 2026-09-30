@@ -33,11 +33,7 @@ jobs:
           grep -E "error:" build.log | sort -u | head -100 || true
           test -d build/Debug-iphonesimulator/Paws.app
 
-      - name: 시뮬레이터 실행 + 스크린샷
-        run: scripts/ci-run.sh build/Debug-iphonesimulator/Paws.app
-
-      - name: UI 테스트 (iPhone)
-        if: always()
+      - name: UI 테스트 (iPhone) + 화면 캡처 (iPhone 세로, iPad 가로)
         run: scripts/ci-test.sh
 
       - name: 결과 업로드
@@ -48,5 +44,6 @@ jobs:
           path: |
             build.log
             test.log
+            test-ipad.log
             screenshots/
           if-no-files-found: ignore

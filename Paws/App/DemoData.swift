@@ -4,7 +4,7 @@ import SwiftData
 import CoreLocation
 
 /// 시뮬레이터 확인용 데모 데이터. `--demo` 실행 인자가 있을 때만 쓴다 (디버그 빌드 전용).
-/// `--demo-open=home|trip|stop|map|reading`으로 처음 열 화면을 고른다.
+/// `--demo-open=home|trip|stop|split|map|reading`으로 처음 열 화면을 고른다.
 @MainActor
 enum DemoData {
     static var isEnabled: Bool {
@@ -99,6 +99,11 @@ enum DemoData {
         case "map":
             navigation.sidebar = .trip(trip)
             if let day = trip.sortedDays.first { navigation.detail = .day(day) }
+        case "split":
+            // iPad: 에디터 | 지도 2분할
+            navigation.sidebar = .trip(trip)
+            if let stop = trip.liveStops.dropFirst().first { navigation.detail = .stop(stop) }
+            navigation.mapBesideEditor = true
         case "reading":
             navigation.sidebar = .trip(trip)
             navigation.detail = .reading(.trip(trip))

@@ -66,8 +66,8 @@ Xcode 16의 폴더 동기화 그룹을 쓰므로 `Paws/` 안에 파일을 추가
 `.github/workflows/ios.yml`이 푸시마다 GitHub Actions macOS 러너에서 다음을 한다.
 
 1. 시뮬레이터용으로 서명 없이 빌드하고 컴파일 오류·경고를 요약한다.
-2. `scripts/ci-run.sh`가 iPhone·iPad 시뮬레이터에서 데모 데이터(`--demo`)로 앱을 띄워 사이드바·여행·에디터·Day 지도·읽기 모드 화면을 연다. 앱이 죽으면 크래시 리포트를 남기고 실패한다.
-3. 스크린샷은 `paws-ci` 아티팩트로 올라간다.
+2. `scripts/ci-test.sh`가 iPhone 시뮬레이터에서 UI 테스트(핵심 흐름 9개)를 돌린다.
+3. 같은 스크립트가 데모 데이터로 주요 화면을 찍는다. iPhone은 세로, iPad는 가로(3단 레이아웃)이고, 결과는 `paws-ci` 아티팩트와 테스트 첨부로 남는다.
 
 로컬 Xcode에서도 스킴의 Arguments에 `--demo --demo-open=stop`을 넣으면 같은 데모 화면으로 시작한다(디버그 빌드 전용, 메모리 저장소라 실제 기록에 영향 없음).
 비공개 저장소라면 macOS 러너는 Actions 무료 시간을 10배로 차감하므로(한 번에 약 10~20분), 필요하면 워크플로 트리거를 `workflow_dispatch`만 남겨 수동 실행으로 바꾼다.
